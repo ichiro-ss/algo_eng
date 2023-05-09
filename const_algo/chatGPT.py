@@ -1,0 +1,73 @@
+import math
+import sys
+import numpy as np
+import random
+from const_algo.primitives import *
+
+def euclidean_distance(p1, p2):
+    return math.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
+
+def tsp_2approx(coords):
+    # Step 1: Compute the Euclidean distance between each pair of cities
+    n = len(coords)
+    dist = [[euclidean_distance(coords[i], coords[j]) for j in range(n)] for i in range(n)]
+
+    # Step 2: Compute the minimum spanning tree of the complete graph
+    visited = [False] * n
+    parent = [None] * n
+    key = [float('inf')] * n
+    key[0] = 0
+    for i in range(n):
+        u = min((key[j], j) for j in range(n) if not visited[j])[1]
+        visited[u] = True
+        for v in range(n):
+            if not visited[v] and dist[u][v] < key[v]:
+                key[v] = dist[u][v]
+                parent[v] = u
+
+    # Step 3: Perform a depth-first search of the minimum spanning tree to obtain a preorder traversal
+    preorder = []
+    stack = [0]
+    while stack:
+        u = stack.pop()
+        preorder.append(u)
+        for v in range(n):
+            if parent[v] == u:
+                stack.append(v)
+
+    # Step 4: Convert the preorder traversal into a Hamiltonian cycle by skipping duplicate vertices
+    visited = [False] * n
+    cycle = []
+    for u in preorder:
+        if not visited[u]:
+            visited[u] = True
+            cycle.append(u)
+
+    return cycle
+
+# Generate random coordinates for 10 cities
+# coords = [(random.uniform(0, 100), random.uniform(0, 100)) for i in range(10)]
+
+# input
+basename = sys.argv[-1].split(".")[0]
+
+with open(basename+".tsp") as inputfile:
+    try:
+        indexofpoint = read_points(inputfile)
+    except FileNotFoundError as err:
+        print(err)
+
+points = np.array(list(indexofpoint.keys()))
+
+# Solve the TSP using the 2-approximation algorithm
+cycle = tsp_2approx(points)
+
+distance_matrix =[[euclidean_distance(points[i], points[j]) for j in range(len(points))] for i in range(len(points))]
+dis = distance_matrix[cycle[-1]][cycle[0]]
+for i in range(len(cycle)):
+    if i:
+        dis += distance_matrix[cycle[i-1]][cycle[i]]
+
+# Print the Hamiltonian cycle
+print("ans:", cycle)
+print("score:", dis)

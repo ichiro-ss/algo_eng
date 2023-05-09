@@ -1,0 +1,7 @@
+lecture
+slides
+
+*.key
+*.pdf
+
+__pycache__
