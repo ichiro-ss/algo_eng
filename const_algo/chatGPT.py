@@ -2,7 +2,7 @@ import math
 import sys
 import numpy as np
 import random
-from const_algo.primitives import *
+from primitives import *
 
 def euclidean_distance(p1, p2):
     return math.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
@@ -45,29 +45,41 @@ def tsp_2approx(coords):
 
     return cycle
 
-# Generate random coordinates for 10 cities
-# coords = [(random.uniform(0, 100), random.uniform(0, 100)) for i in range(10)]
+def main(instance):
+    with open("instances/"+instance+".tsp") as inputfile:
+        try:
+            indexofpoint = read_points(inputfile)
+        except FileNotFoundError as err:
+            print(err)
 
-# input
-basename = sys.argv[-1].split(".")[0]
+    points = np.array(list(indexofpoint.keys()))
 
-with open(basename+".tsp") as inputfile:
-    try:
-        indexofpoint = read_points(inputfile)
-    except FileNotFoundError as err:
-        print(err)
+    # Solve the TSP using the 2-approximation algorithm
+    cycle = tsp_2approx(points)
 
-points = np.array(list(indexofpoint.keys()))
+    distance_matrix =[[euclidean_distance(points[i], points[j]) for j in range(len(points))] for i in range(len(points))]
+    dis = distance_matrix[cycle[-1]][cycle[0]]
+    for i in range(len(cycle)):
+        if i:
+            dis += distance_matrix[cycle[i-1]][cycle[i]]
 
-# Solve the TSP using the 2-approximation algorithm
-cycle = tsp_2approx(points)
+    return cycle, dis
 
-distance_matrix =[[euclidean_distance(points[i], points[j]) for j in range(len(points))] for i in range(len(points))]
-dis = distance_matrix[cycle[-1]][cycle[0]]
-for i in range(len(cycle)):
-    if i:
-        dis += distance_matrix[cycle[i-1]][cycle[i]]
+if __name__ == "__main__":
+    # input
+    basename, extname = sys.argv[-1].split(".")
+    if extname == "tsp":
+        ans, score = main(basename)
+        print(basename, ans)
+        print("score:", score)
+    elif extname == "txt":
+        with open("instances/"+basename+".txt") as inputfile:
+            try:
+                for line in inputfile.read().splitlines():
+                    ans, score = main(line)
+                    print(line, ans)
+                    print("score:", score)
+            except FileNotFoundError as err:
+                print(err)
 
-# Print the Hamiltonian cycle
-print("ans:", cycle)
-print("score:", dis)
+
