@@ -1,6 +1,6 @@
 import sys
 import math
-from const_algo.primitives import *
+from primitives import *
 import numpy as np
 
 class UnionFind:
@@ -32,9 +32,6 @@ def eval_tsp(route, distance_matrix):
         if i:
             dis += distance_matrix[route[i-1]][route[i]]
     return dis
-
-def euclidean_distance(x, y):
-    return np.sqrt(np.sum(np.square(x-y)))
 
 def compute_distance_matrix(points):
     n = len(points)
@@ -84,19 +81,32 @@ def solve_tsp_2approx(points):
     to_cycle(-1, 0, n, mst, tour)
     return tour
 
-# input
-basename = sys.argv[-1].split(".")[0]
+def main(instance):
+    with open("instances/"+instance+".tsp") as inputfile:
+        try:
+            indexofpoint = read_points(inputfile)
+        except FileNotFoundError as err:
+            print(err)
 
-with open(basename+".tsp") as inputfile:
-    try:
-        indexofpoint = read_points(inputfile)
-    except FileNotFoundError as err:
-        print(err)
+    points = np.array(list(indexofpoint.keys()))
 
-points = np.array(list(indexofpoint.keys()))
+    cycle = solve_tsp_2approx(points)
 
-# compute distance matrix
+    return cycle, eval_tsp(cycle, compute_distance_matrix(points))
 
-tour = solve_tsp_2approx(points)
-print("ans:", tour)
-print("score:", eval_tsp(tour, compute_distance_matrix(points)))
+if __name__ == "__main__":
+    # input
+    basename, extname = sys.argv[-1].split(".")
+    if extname == "tsp":
+        ans, score = main(basename)
+        print(basename, ans)
+        print("score", score)
+    elif extname == "txt":
+        with open("instances/"+basename+".txt") as inputfile:
+            try:
+                for line in inputfile.read().splitlines():
+                    ans, score = main(line)
+                    print(line, ans)
+                    print("score:", score)
+            except FileNotFoundError as err:
+                print(err)

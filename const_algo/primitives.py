@@ -1,3 +1,5 @@
+import numpy as np
+
 def read_points(f) -> dict:
     """Read the input file"""
     indexofpoint = {}
@@ -6,3 +8,7 @@ def read_points(f) -> dict:
             i, x, y = (float(s) for s in line.split())
             indexofpoint[(x, y)] = int(i)-1
     return indexofpoint
+
+
+def euclidean_distance(x, y):
+    return int(np.sqrt(np.sum(np.square(x-y))) + 0.5)

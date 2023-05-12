@@ -1,5 +1,5 @@
 import sys
-import chatGPT
+import chatGPT, two_approx
 
 filename = sys.argv[-1]
 instances = []
@@ -14,5 +14,10 @@ with open("instances/"+filename+".txt") as inputfile:
 
 for _ in instances:
     ans, score = chatGPT.main(_)
-    print(_, ans)
+    print("chatGPT")
+    # print(_, ans)
+    print("score:", score)
+    ans, score = two_approx.main(_)
+    print("2approx")
+    # print(_, ans)
     print("score:", score)
