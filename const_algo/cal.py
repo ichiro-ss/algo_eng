@@ -14,10 +14,9 @@ with open("instances/"+filename+".txt") as inputfile:
 
 for _ in instances:
     ans, score = chatGPT.main(_)
-    print("chatGPT")
+    print(_)
     # print(_, ans)
-    print("score:", score)
+    print("chatGPT score:", score)
     ans, score = two_approx.main(_)
-    print("2approx")
     # print(_, ans)
-    print("score:", score)
+    print("2approx score:", score)

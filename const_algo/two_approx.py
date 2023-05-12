@@ -26,19 +26,6 @@ class UnionFind:
     def are_same(self, x, y):
         return self.root(x) == self.root(y)
 
-def eval_tsp(route, distance_matrix):
-    dis = distance_matrix[route[-1]][route[0]]
-    for i in range(len(route)):
-        if i:
-            dis += distance_matrix[route[i-1]][route[i]]
-    return dis
-
-def compute_distance_matrix(points):
-    n = len(points)
-    distance_matrix = np.array([[euclidean_distance(points[i], points[j]) for j in range(n)] for i in range(n)])
-
-    return distance_matrix
-
 # return minimum spanning tree ~~~mst: linked list
 def kruskal(distance_matrix) -> list:
     n = len(distance_matrix)
@@ -66,14 +53,13 @@ def to_cycle(pre, now, n, mst, tour):
             continue
         to_cycle(now, next, n, mst, tour)
 
-def solve_tsp_2approx(points):
+def solve_tsp_2approx(points, dists):
     # Step 1: Compute the Euclidean distance between eah pair of cities
     n = len(points)
-    distance_matrix = compute_distance_matrix(points)
 
     # Step 2: Compute the minimum spanning tree of the complete graph
     # Step 3: duplicate the branches of the minimum spanning tree and create an Eulerian graph
-    mst = kruskal(distance_matrix)
+    mst = kruskal(dists)
 
 
     # Step 4: Convert the preorder traversal into a Hamiltonian cycle by skipping duplicate vertices
@@ -89,10 +75,11 @@ def main(instance):
             print(err)
 
     points = np.array(list(indexofpoint.keys()))
+    distance_matrix = compute_distance_matrix(points)
 
-    cycle = solve_tsp_2approx(points)
+    cycle = solve_tsp_2approx(points, distance_matrix)
 
-    return cycle, eval_tsp(cycle, compute_distance_matrix(points))
+    return cycle, score(cycle, distance_matrix)
 
 if __name__ == "__main__":
     # input

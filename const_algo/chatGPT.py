@@ -53,17 +53,12 @@ def main(instance):
             print(err)
 
     points = np.array(list(indexofpoint.keys()))
+    distance_matrix = compute_distance_matrix(points)
 
     # Solve the TSP using the 2-approximation algorithm
     cycle = tsp_2approx(points)
 
-    distance_matrix =[[euclidean_distance(points[i], points[j]) for j in range(len(points))] for i in range(len(points))]
-    dis = distance_matrix[cycle[-1]][cycle[0]]
-    for i in range(len(cycle)):
-        if i:
-            dis += distance_matrix[cycle[i-1]][cycle[i]]
-
-    return cycle, dis
+    return cycle, score(cycle, distance_matrix)
 
 if __name__ == "__main__":
     # input
