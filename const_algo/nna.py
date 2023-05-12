@@ -1,5 +1,32 @@
 import sys
 import numpy as np
+from primitives import *
+
+def nearest_neighbor(points, dists):
+    n = len(points)
+    now_point = 0
+    is_visited = [False]*len(points)
+    is_visited[now_point] = True
+    cycle = [now_point]
+
+    for _ in range(n-1):
+        min_idx = 0
+        idx = 0
+        while idx < n:
+            if not is_visited[idx]:
+                min_idx = idx
+                break
+            idx += 1
+
+        for i in range(idx, n, 1):
+            if not is_visited[i] and \
+                dists[now_point][i] < dists[now_point][min_idx]:
+                min_idx = i
+        is_visited[min_idx] = True
+        now_point = min_idx
+        cycle.append(now_point)
+
+    return cycle
 
 def main(instance):
     with open("instances/"+instance+".tsp") as inputfile:
@@ -9,10 +36,11 @@ def main(instance):
             print(err)
 
     points = np.array(list(indexofpoint.keys()))
+    distance_matrix = compute_distance_matrix(points)
 
-    cycle = solve_tsp_2approx(points)
+    cycle = nearest_neighbor(points, distance_matrix)
 
-    return cycle, eval_tsp(cycle, compute_distance_matrix(points))
+    return cycle, score(cycle, distance_matrix)
 
 if __name__ == "__main__":
     # input

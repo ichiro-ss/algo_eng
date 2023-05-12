@@ -1,5 +1,5 @@
 import sys
-import chatGPT, two_approx
+import chatGPT, two_approx, nna
 
 filename = sys.argv[-1]
 instances = []
@@ -20,3 +20,6 @@ for _ in instances:
     ans, score = two_approx.main(_)
     # print(_, ans)
     print("2approx score:", score)
+    ans, score = nna.main(_)
+    # print(_, ans)
+    print("NNA|n^2 score:", score)
