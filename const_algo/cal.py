@@ -13,13 +13,20 @@ with open("instances/"+filename+".txt") as inputfile:
         print(err)
 
 for _ in instances:
-    ans, score = chatGPT.main(_)
+    ans, score, com_t = chatGPT.main(_)
     print(_)
     # print(_, ans)
     print("chatGPT score:", score)
-    ans, score = two_approx.main(_)
+    print("compute time: ", com_t, "sec")
+    print()
+    ans, score, com_t = two_approx.main(_)
     # print(_, ans)
     print("2approx score:", score)
-    ans, score = nna.main(_)
+    print("compute time: ", com_t, "sec")
+    print()
+
+    ans, score, com_t = nna.main(_)
     # print(_, ans)
     print("NNA|n^2 score:", score)
+    print("compute time: ", com_t, "sec")
+    print()

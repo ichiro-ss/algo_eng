@@ -2,6 +2,7 @@ import sys
 import math
 from primitives import *
 import numpy as np
+import time
 
 class UnionFind:
     def __init__(self, n):
@@ -74,12 +75,14 @@ def main(instance):
         except FileNotFoundError as err:
             print(err)
 
+    st = time.perf_counter()
     points = np.array(list(indexofpoint.keys()))
     distance_matrix = compute_distance_matrix(points)
 
     cycle = solve_tsp_2approx(points, distance_matrix)
+    en = time.perf_counter()
 
-    return cycle, score(cycle, distance_matrix)
+    return cycle, score(cycle, distance_matrix), en-st
 
 if __name__ == "__main__":
     # input

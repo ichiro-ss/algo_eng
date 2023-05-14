@@ -1,6 +1,7 @@
 import sys
 import numpy as np
 from primitives import *
+import time
 
 def nearest_neighbor(points, dists):
     n = len(points)
@@ -35,12 +36,14 @@ def main(instance):
         except FileNotFoundError as err:
             print(err)
 
+    st = time.perf_counter()
     points = np.array(list(indexofpoint.keys()))
     distance_matrix = compute_distance_matrix(points)
 
     cycle = nearest_neighbor(points, distance_matrix)
+    en = time.perf_counter()
 
-    return cycle, score(cycle, distance_matrix)
+    return cycle, score(cycle, distance_matrix), en-st
 
 if __name__ == "__main__":
     # input

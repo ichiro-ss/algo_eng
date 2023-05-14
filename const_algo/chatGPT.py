@@ -3,6 +3,7 @@ import sys
 import numpy as np
 import random
 from primitives import *
+import time
 
 # def euclidean_distance(p1, p2):
 #     return math.sqrt((p1[0]-p2[0])**2 + (p1[1]-p2[1])**2)
@@ -52,13 +53,15 @@ def main(instance):
         except FileNotFoundError as err:
             print(err)
 
+    st = time.perf_counter()
     points = np.array(list(indexofpoint.keys()))
     distance_matrix = compute_distance_matrix(points)
 
     # Solve the TSP using the 2-approximation algorithm
     cycle = tsp_2approx(points)
+    en = time.perf_counter()
 
-    return cycle, score(cycle, distance_matrix)
+    return cycle, score(cycle, distance_matrix), en-st
 
 if __name__ == "__main__":
     # input
