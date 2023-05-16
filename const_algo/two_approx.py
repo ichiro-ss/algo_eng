@@ -3,6 +3,7 @@ import math
 from primitives import *
 import numpy as np
 import time
+sys.setrecursionlimit(10**9)
 
 class UnionFind:
     def __init__(self, n):
@@ -75,10 +76,10 @@ def main(instance):
         except FileNotFoundError as err:
             print(err)
 
-    st = time.perf_counter()
     points = np.array(list(indexofpoint.keys()))
     distance_matrix = compute_distance_matrix(points)
 
+    st = time.perf_counter()
     cycle = solve_tsp_2approx(points, distance_matrix)
     en = time.perf_counter()
 

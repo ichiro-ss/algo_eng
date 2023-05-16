@@ -1,6 +1,20 @@
 import sys
 import chatGPT, two_approx, nna
 
+
+def output(algo, instance):
+    if algo == "chatGPT":
+        ans, score, com_t = chatGPT.main(instance)
+    elif algo == "2approx":
+        ans, score, com_t = two_approx.main(instance)
+    elif algo == "NNA|n^2":
+        ans, score, com_t = nna.main(instance)
+
+    # print(_, ans)
+    print(algo, "score:", score)
+    print("compute time: ", com_t, "sec")
+    print()
+
 filename = sys.argv[-1]
 instances = []
 
@@ -12,21 +26,8 @@ with open("instances/"+filename+".txt") as inputfile:
     except FileNotFoundError as err:
         print(err)
 
+algos = ["chatGPT", "2approx", "NNA|n^2"]
 for _ in instances:
-    ans, score, com_t = chatGPT.main(_)
     print(_)
-    # print(_, ans)
-    print("chatGPT score:", score)
-    print("compute time: ", com_t, "sec")
-    print()
-    ans, score, com_t = two_approx.main(_)
-    # print(_, ans)
-    print("2approx score:", score)
-    print("compute time: ", com_t, "sec")
-    print()
-
-    ans, score, com_t = nna.main(_)
-    # print(_, ans)
-    print("NNA|n^2 score:", score)
-    print("compute time: ", com_t, "sec")
-    print()
+    for algo in algos:
+        output(algo, _)

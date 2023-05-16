@@ -53,10 +53,10 @@ def main(instance):
         except FileNotFoundError as err:
             print(err)
 
-    st = time.perf_counter()
     points = np.array(list(indexofpoint.keys()))
     distance_matrix = compute_distance_matrix(points)
 
+    st = time.perf_counter()
     # Solve the TSP using the 2-approximation algorithm
     cycle = tsp_2approx(points)
     en = time.perf_counter()
