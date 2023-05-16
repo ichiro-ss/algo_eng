@@ -1,15 +1,20 @@
 import sys
 import chatGPT, two_approx, nna
-
+import visalize
 
 def output(algo, instance):
     if algo == "chatGPT":
-        ans, score, com_t = chatGPT.main(instance)
+        points, ans, score, com_t = chatGPT.main(instance)
     elif algo == "2approx":
-        ans, score, com_t = two_approx.main(instance)
+        points, ans, score, com_t = two_approx.main(instance)
     elif algo == "NNA|n^2":
-        ans, score, com_t = nna.main(instance)
+        points, ans, score, com_t = nna.main(instance)
 
+    title = instance+"_"+algo
+    # visualize
+    visalize.main(points, ans, title)
+
+    # output results
     # print(_, ans)
     print(algo, "score:", score)
     print("compute time: ", com_t, "sec")

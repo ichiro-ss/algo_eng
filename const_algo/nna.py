@@ -43,7 +43,7 @@ def main(instance):
     cycle = nearest_neighbor(points, distance_matrix)
     en = time.perf_counter()
 
-    return cycle, score(cycle, distance_matrix), en-st
+    return points, cycle, score(cycle, distance_matrix), en-st
 
 if __name__ == "__main__":
     # input

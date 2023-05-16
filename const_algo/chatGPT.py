@@ -61,7 +61,7 @@ def main(instance):
     cycle = tsp_2approx(points)
     en = time.perf_counter()
 
-    return cycle, score(cycle, distance_matrix), en-st
+    return points, cycle, score(cycle, distance_matrix), en-st
 
 if __name__ == "__main__":
     # input
