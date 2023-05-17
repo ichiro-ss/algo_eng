@@ -14,7 +14,7 @@ def output(algo, instance):
 
     title = instance+"_"+algo
     # visualize
-    visualize.main(points, ans, title)
+    # visualize.main(points, ans, title)
 
     # output results
     # print(_, ans)
@@ -35,7 +35,7 @@ def output(algo, instance):
     elif instance == "d15112":
         opt_v = 1573084
 
-    print(algo, "score:", score, ", diff:", score - opt_v)
+    print(algo, "score:", score, ", diff:", score - opt_v, "__", (score-opt_v)/opt_v * 100, "%")
     print("compute time: ", com_t, "sec")
     print()
 

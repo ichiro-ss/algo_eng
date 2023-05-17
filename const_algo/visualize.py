@@ -12,8 +12,8 @@ def main(points, tour: list, title):
     ax.add_collection(lc)
     ax.annotate("", xy=lines[0][1], xytext=lines[0][0], arrowprops=dict(width=1, headwidth=5, headlength=2))
 
-    ax.plot(points[0][0], points[0][1], ".", color="orange", markersize=10, alpha=0.6)
-    ax.plot([points[i][0] for i in range(1,  len(points), 1)], [points[i][1] for i in range(1, len(points), 1)], ".", color="black", alpha=0.6)
+    ax.plot([points[i][0] for i in range(len(points))], [points[i][1] for i in range(len(points))], ".", color="black", alpha=0.6)
+    ax.plot(points[tour[0]][0], points[tour[0]][1], ".", color="orange", markersize=10)
     ax.autoscale()
     ax.set_title(title)
 
@@ -23,3 +23,4 @@ def main(points, tour: list, title):
     #   }
     #   ax.text(points[tour[0]][0], points[tour[0]][1], "start", bbox=boxdic)
     plt.savefig("vis/"+title+"png")
+    plt.close()
