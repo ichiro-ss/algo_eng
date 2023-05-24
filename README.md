@@ -33,7 +33,7 @@ if you need to run a single algorithm
 ```bash
 python const_algo/nna.py small.txt
 ```
-or you specify the file name
+or you can specify the file name
 ```bash
 python const_algo/nna.py kroD100.tsp
 ```
