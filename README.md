@@ -18,3 +18,22 @@
 | d1655.tsp           |             1655 |                  |
 | fl3795.tsp          |             3795 |                  |
 | d15112.tsp          |            15112 |                  |
+
+you can see the results of small instances
+'''bash
+python const_algo/cal.py small
+'''
+
+you can see the results of all instances
+'''bash
+python const_algo/cal.py instances
+'''
+
+if you need to run a single algorithm
+'''bash
+python const_algo/nna.py small.txt
+'''
+or you specify the file name
+'''bash
+python const_algo/nna.py kroD100.tsp
+'''
