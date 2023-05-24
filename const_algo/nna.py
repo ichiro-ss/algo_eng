@@ -56,7 +56,7 @@ if __name__ == "__main__":
         with open("instances/"+basename+".txt") as inputfile:
             try:
                 for line in inputfile.read().splitlines():
-                    ans, score = main(line)
+                    points, ans, score, com_t = main(line)
                     print(line, ans)
                     print("score:", score)
             except FileNotFoundError as err:
