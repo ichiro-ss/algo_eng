@@ -49,7 +49,7 @@ if __name__ == "__main__":
     # input
     basename, extname = sys.argv[-1].split(".")
     if extname == "tsp":
-        ans, score = main(basename)
+        points, ans, score, com_t = main(basename)
         print(basename, ans)
         print("score", score)
     elif extname == "txt":
