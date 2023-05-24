@@ -49,15 +49,15 @@ if __name__ == "__main__":
     # input
     basename, extname = sys.argv[-1].split(".")
     if extname == "tsp":
-        points, ans, score, com_t = main(basename)
+        points, ans, sc, com_t = main(basename)
         print(basename, ans)
-        print("score", score)
+        print("score", sc)
     elif extname == "txt":
         with open("instances/"+basename+".txt") as inputfile:
             try:
                 for line in inputfile.read().splitlines():
-                    points, ans, score, com_t = main(line)
+                    points, ans, sc, com_t = main(line)
                     print(line, ans)
-                    print("score:", score)
+                    print("score:", sc)
             except FileNotFoundError as err:
                 print(err)
