@@ -1,20 +1,17 @@
 import sys
-import chatGPT, two_approx, nna, rechatGPT
+import ls_swap, ls_opt, ls_swop
 import visualize
-
 def output(algo, instance):
-    if algo == "chatGPT":
-        points, ans, score, com_t = chatGPT.main(instance)
-    elif algo == "2approx":
-        points, ans, score, com_t = two_approx.main(instance)
-    elif algo == "NNA|n^2":
-        points, ans, score, com_t = nna.main(instance)
-    elif algo == "rechatGPT":
-        points, ans, score, com_t = rechatGPT.main(instance)
+    if algo == "ls_swap":
+        points, ans, score, com_t, move = ls_swap.main(instance)
+    if algo == "ls_opt":
+        points, ans, score, com_t, move = ls_opt.main(instance)
+    if algo == "ls_swop":
+        points, ans, score, com_t, move = ls_swop.main(instance)
 
     title = instance+"_"+algo
     # visualize
-    # visualize.main(points, ans, title)
+    visualize.main(points, ans, title)
 
     # output results
     # print(_, ans)
@@ -36,7 +33,7 @@ def output(algo, instance):
         opt_v = 1573084
 
     print(algo, "score:", score, ", diff:", score - opt_v, "__", (score-opt_v)/opt_v * 100, "%")
-    print("compute time: ", com_t, "sec")
+    print("compute time: ", com_t, "sec,", "move:", move)
     print()
 
 filename = sys.argv[-1]
@@ -50,7 +47,8 @@ with open("instances/"+filename+".txt") as inputfile:
     except FileNotFoundError as err:
         print(err)
 
-algos = ["chatGPT", "2approx", "NNA|n^2", "rechatGPT"]
+# algos = ["ls_swap", "ls_opt", "ls_swop"]
+algos = ["ls_opt", "ls_swop"]
 for _ in instances:
     print(_)
     for algo in algos:

@@ -25,5 +25,4 @@ def score(route, dists):
     for i in range(len(route)):
         if i:
             dis += round(dists[route[i-1]][route[i]])
-    print(dis)
     return int(dis)
