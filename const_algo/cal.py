@@ -47,8 +47,7 @@ with open("instances/"+filename+".txt") as inputfile:
     except FileNotFoundError as err:
         print(err)
 
-# algos = ["ls_swap", "ls_opt", "ls_swop"]
-algos = ["ls_opt", "ls_swop"]
+algos = ["ls_opt", "ls_swap", "ls_swop"]
 for _ in instances:
     print(_)
     for algo in algos:

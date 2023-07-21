@@ -4,11 +4,14 @@ import time
 import random
 import nna
 from primitives import *
+import copy
 
 def swap(cycle, sw1, sw2):
-    tmp = cycle[sw1]
-    cycle[sw1] = cycle[sw2]
-    cycle[sw2] = tmp
+    res = copy.copy(cycle)
+    res[sw1] = cycle[sw2]
+    res[sw2] = cycle[sw1]
+
+    return res
 
 def opt(cycle, sw1, sw2):
     rev = cycle[sw1:sw2+1]
