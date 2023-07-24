@@ -4,11 +4,34 @@ import time
 import random
 import nna
 from primitives import *
+import ls_swop
+import ls_opt
+import copy
+
+def double_b(cycle, dists):
+    tcycle = copy.copy(cycle)
+    i = random.randrange(0, len(cycle)-7)
+    j = random.randrange(i+2, len(cycle)-5)
+    k = random.randrange(j+2, len(cycle)-3)
+    l = random.randrange(k+2, len(cycle)-1)
+    tcycle[i+1:l+1] = tcycle[k+1:l+1] + tcycle[j+1:k+1] + tcycle[i+1:j+1]
+
+    return tcycle
 
 def iterated_ls(cycle, dists):
-    cnt = 0
-    while cnt < 10:
+    cnt_kick = 0
+    pre_score = score(cycle, dists)
+    st = time.perf_counter()
+    while time.perf_counter() - st < 100:
+        tmp_cycle = double_b(cycle, dists)
+        tmp_cycle, _ = ls_opt.local_search(tmp_cycle, dists)
+        tmp_score = score(tmp_cycle, dists)
+        if tmp_score < pre_score:
+            cycle = tmp_cycle
+            pre_score = tmp_score
+        cnt_kick += 1
 
+    return cycle, cnt_kick
 
 def main(instance):
     with open("instances/"+instance+".tsp") as inputfile:
