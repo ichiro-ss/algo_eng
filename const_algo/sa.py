@@ -1,37 +1,48 @@
 import numpy as np
+import warnings
 import sys
 import time
 import random
 import nna
 from primitives import *
-import ls_swop
-import ls_opt
 import copy
+import math
+LIMIT = 100
+warnings.filterwarnings('ignore')
 
-def double_b(cycle, dists):
-    tcycle = copy.copy(cycle)
-    i = random.randrange(0, len(cycle)-7)
-    j = random.randrange(i+2, len(cycle)-5)
-    k = random.randrange(j+2, len(cycle)-3)
-    l = random.randrange(k+2, len(cycle)-1)
-    tcycle[i+1:l+1] = tcycle[k+1:l+1] + tcycle[j+1:k+1] + tcycle[i+1:j+1]
+def opt(cycle, sw1, sw2):
+    rev = cycle[sw1:sw2+1]
+    rev.reverse()
+    cycle = cycle[:sw1]+rev+cycle[sw2+1:]
 
-    return tcycle
+    return cycle
 
-def iterated_ls(cycle, dists):
-    cnt_kick = 0
-    pre_score = score(cycle, dists)
+def simulated_annealing(cycle, dists):
+    now_cycle = best_cycle = copy.copy(cycle)
+    now_v = best_v = score(cycle, dists)
+    t_st, t_fin = 50, 10
+    n = len(cycle)
+    move = 0
+
     st = time.perf_counter()
-    while time.perf_counter() - st < 10:
-        tmp_cycle = double_b(cycle, dists)
-        tmp_cycle, _ = ls_opt.local_search(tmp_cycle, dists)
-        tmp_score = score(tmp_cycle, dists)
-        if tmp_score < pre_score:
-            cycle = tmp_cycle
-            pre_score = tmp_score
-        cnt_kick += 1
+    while time.perf_counter() - st < LIMIT:
+        sw1 = random.randrange(0, n-1)
+        sw2 = random.randrange(sw1+1, n)
+        sw1m = sw1-1 if sw1 else n-1
+        sw2p = sw2+1 if sw2 != n-1 else 0
+        if not ((sw1 == 0 and sw2 == n-1) or sw2 - sw1 == 1):
+            diff = dists[cycle[sw1]][cycle[sw2p]] + dists[cycle[sw2]][cycle[sw1m]] - dists[cycle[sw1]][cycle[sw1m]] - dists[cycle[sw2]][cycle[sw2p]]
+        else:
+            diff = 0
 
-    return cycle, cnt_kick
+        temp = t_st + (t_fin - t_st) * (time.perf_counter() - st) / LIMIT
+        prob = 1 - np.exp(diff / temp)
+        if prob > random.random():
+            now_cycle = opt(cycle, sw1, sw2)
+            now_v = score(now_cycle, dists)
+        move += 1
+
+    return best_cycle, move
 
 def main(instance):
     with open("instances/"+instance+".tsp") as inputfile:
@@ -45,7 +56,7 @@ def main(instance):
 
     cycle = nna.nearest_neighbor(points, distance_matrix)
     st = time.perf_counter()
-    cycle, move = iterated_ls(cycle, distance_matrix)
+    cycle, move = simulated_annealing(cycle, distance_matrix)
     en = time.perf_counter()
 
     return points, cycle, score(cycle, distance_matrix), en-st, move

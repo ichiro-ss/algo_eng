@@ -2,6 +2,7 @@ import sys
 import ls_swap, ls_opt, ls_swop
 import visualize
 import ils
+import sa
 
 def output(algo, instance):
     if algo == "ls_swap":
@@ -12,6 +13,8 @@ def output(algo, instance):
         points, ans, score, com_t, move = ls_swop.main(instance)
     if algo == "ils":
         points, ans, score, com_t, move = ils.main(instance)
+    if algo == "sa":
+        points, ans, score, com_t, move = sa.main(instance)
 
     title = instance+"_"+algo
     # visualize
@@ -51,7 +54,8 @@ with open("instances/"+filename+".txt") as inputfile:
     except FileNotFoundError as err:
         print(err)
 
-algos = ["ls_opt", "ls_swap", "ls_swop", "ils"]
+# algos = ["ls_opt", "ls_swap", "ls_swop", "ils", "sa"]
+algos = ["sa"]
 for _ in instances:
     print(_)
     for algo in algos:
